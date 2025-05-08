@@ -1,17 +1,15 @@
 import { IProductItem } from "../../types";
-import { IModalView } from "./ModalView";
+import { ModalView } from './ModalView';
 import { IProductView } from "./ProductView";
+import { IEvents } from '../base/events';
 
-// class ProductDetailView implements IModalView, IProductView {
-//     open(): void {
+export class ProductDetailView extends ModalView implements IProductView {
 
-//     }
+	constructor(template: HTMLTemplateElement, events: IEvents) {
+		super(template, events);
+	}
 
-//     close(): void {
-        
-//     }
+	render(item: IProductItem): HTMLElement {
 
-//     render(item: IProductItem): HTMLElement {
-        
-//     }
-// }
+	}
+}

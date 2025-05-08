@@ -124,86 +124,272 @@ export type EventType =
 ## Слой данных
 Слой данных представлен моделями:
 
-#### Модель апи запросов
+### ApiRequestModel
+Назначение: Работа с API и кэширование запросов
+
+Методы:
+
+`get(uri)` - GET-запрос с кэшированием
+
+`post(uri, body)` - POST-запрос
+
+Пример:
 ```
-export interface IApiRequestModel {
-    cache: Record<string, object>
-    get(uri: string): Promise<object>;
-    post(uri: string, body: object): Promise<object>;
+const api = new ApiRequestModel()
+const data = await api.get('/product')
+```
+
+### CatalogModel
+Назначение: Управление каталогом товаров
+
+Методы:
+
+`getCatalogItems()` - Получение списка товаров
+
+Зависимости: `ApiRequestModel`
+
+Конструктор принимает модель для работы с API  
+```
+constructor(private api: ApiRequestModel) {}
+```
+
+Пример:
+
+```
+const catalog = new CatalogModel(api)
+const items = await catalog.getCatalogItems()
+```
+
+### BasketModel
+
+Назначение: Работа с корзиной товаров
+
+Свойства:
+
+`items` - товары в корзине
+
+`total` - общая сумма
+
+`count`  - количество товаров
+
+Методы:
+
+`addItem()` - Добавить товар
+
+`removeItem()` - Удалить товар
+
+`clearBasket()` - Очистить корзину
+
+
+Пример:
+```
+const basket = new BasketModel()
+basket.addItem(product)
+```
+
+### OrderModel
+
+Назначение: Оформление заказов
+
+Методы:
+
+`saveOrder()` - Сохранить заказ
+
+`validateOrder()` - Проверить правильность заказа
+
+Зависимости: `ApiRequestModel`
+
+Конструктор принимает данные заказа соответствующие типу `IOrderData` и экземпляр `ApiRequestModel`
+```
+constructor(protected _order: IOrderData, private api: ApiRequestModel) {}
+```
+
+Пример:
+```
+const order = new OrderModel(orderData, api)
+order.saveOrder()
+```
+
+### ProductModel
+
+Назначение: Работа с товаром
+Свойства:
+
+`badgeColor` - цвет категории
+
+Методы:
+
+`inBasket()` - Проверить наличие в корзине
+
+Конструктор принимает данные о продукте соответствующие типу `IProductItem`
+и экземпляр класса `BasketModel`
+
+```
+ constructor(
+      productData: IProductItem,
+      private basket: BasketModel
+    ) {
+        this.id = productData.id;
+        this.title = productData.title;
+        this.description = productData.description;
+        this.category = productData.category;
+        this.image = productData.image;
+        this.price = productData.price;
+    }
+```
+
+
+Пример:
+```
+const product = new ProductModel(data, basket)
+product.inBasket()
+```
+
+## Слой представлений (Views)
+### ModalView
+Назначение: Базовое модальное окно
+
+Методы:
+
+`open()` - Открыть
+
+`close()` - Закрыть
+Пример:
+```
+const modal = new ModalView(template)
+modal.open()
+```
+
+### BasketView
+
+Наследует `ModalView`
+
+Назначение: Отображение корзины
+
+Методы:
+
+`render(items)` - Отрисовать корзину
+
+Конструктор принимает HTML шаблон и брокер событий
+
+```
+constructor(private template: HTMLTemplateElement, private events: IEvents) {
+    super(template, events);
 }
 ```
-`cache` сохраняет результаты GET запросов к бэкенду\
-`get()` метод для отправки GET запросов к бэкенду\
-`post()` метод для отправки POST запросов к бэкенду
 
-#### Модель данных корзины
-Расширяет интерфейс данных корзины `IBasketData`
+Пример:
 ```
-export interface IBasketModel extends IBasketData {
-    addItem(item: IProductItem): void;
-    removeItem(id: string): void;
-    clearBasket(): void;
+const events = new EventEmitter()
+const basket = new BasketModel()
+basket.addItem(product)
+
+const view = new BasketView(template, events)
+view.render(basket.items)
+```
+
+### CatalogView
+Назначение: Отображение каталога
+
+Конструктор принимает HTML шаблон и брокер событий
+
+```
+constructor(private template: HTMLTemplateElement, private events: IEvents) {}
+```
+
+Методы:
+
+`render(items)` - Отрисовать каталог
+
+Пример:
+```
+const view = new CatalogView(template)
+view.render(catalogItems)
+```
+
+### ProductView
+Назначение: Отображение крточки товара в каталоге
+
+Конструктор принимает HTML шаблон и брокер событий
+
+```
+constructor(private template: HTMLTemplateElement, private events: IEvents) {
+    super(template, events);
 }
 ```
-`addItem()` метод для добавления заказа в корзину\
-`removeItem()` метод удаления товара из корзины, принимает аргументом `id` товара\
-`clearBasket()` метод очищает корзину
 
-#### Модель данных каталога товаров
+Методы:
+
+`render(item)` - Отрисовать товар
+
+`open()/close()` - Управление видимостью
+
+Пример:
+```
+const events = new EventEmitter();
+const modalDetailView = new ProductDetailView(template, events)
+modalDetailView.open()
+modalDetailView.render(product)
+```
+
+### ProductDetailView
+
+Наследует `ModalView`
+
+Назначение: Подробная карточка товара
+
+Конструктор принимает HTML шаблон и брокер событий
 
 ```
-export interface ICatalogModel {
-    getCatalogItems(): IProductItem[];
+constructor(private template: HTMLTemplateElement, private events: IEvents) {
+    super(template, events);
 }
 ```
-`getCatalogItems()` возвращает список товаров, доступных для продажи\
 
-### Модель заказа
-Наследует интерфейс данных заказа `IOrderData`
+Методы:
+
+`render(item)` - Отрисовать товар
+
+`open()/close()` - Управление видимостью
+
+Пример:
 ```
-export interface IOrderModel extends IOrderData {
-    saveOrder(): void
-    validateOrder(): boolean
+const events = new EventEmitter();
+const modalDetailView = new ProductDetailView(template, events)
+modalDetailView.open()
+modalDetailView.render(product)
+```
+
+### OrderFormView
+
+Наследует `ModalView`
+
+Назначение: Форма заказа
+
+Свойства:
+
+`stage` - текущий этап оформления
+
+Методы:
+
+`render()` - Отрисовать форму
+
+Конструктор принимает HTML шаблон и брокер событий
+
+```
+constructor(private template: HTMLTemplateElement, private events: IEvents) {
+    super(template, events)
 }
 ```
 
-`saveOrder()` метод для отправки заказа на сервер\
-`validateOrder()` метод для валидации свойств заказа\
+Пример:
 
-### Модель продукта (товара)
-```export interface IProductModel extends IProductItem {
-    badgeColor: string;
-    inBasket(): boolean;
-}
 ```
-`badgeColor` свойство хранит цвет бейджа для категории товара\
-`inBasket()` метод определяет, находится ли такой товар в корзине
-
-## Слой отображений
-Интерфейс модальных окон приложения
+const events = new EventEmitter();
+const form = new OrderFormView(template, events)
+form.open()
+form.render()
 ```
-export interface IModalView {
-    open(): void; // Открытие модального окна
-    close(): void; // Закрытие модального окна
-}
-```
-`IBasketView` представление корзины, предоставляет метод `render` принимающий аргументом элементы типа `TBasketItem` возвращает разметку `HTMLElement` 
-
-`ICatalogView` представление каталога товаров, предоставляет метод `render` принимающий аргументом элементы типа `IProductItem` возвращает разметку `HTMLElement`
-
-`IProductView` представление каталога товаров, предоставляет метод `render` принимающий аргументом элементы типа `IProductItem` возвращает разметку `HTMLElement`
-
-Интерфейс представления формы заказа, наследует методы `IModalView`
-```
-export interface IOrderFormView extends IModalView {
-    stage: TOrderStage;
-    render(): HTMLElement;               
-}
-```
-`stage`  стадия создания заказа типа `TOrderStage` \
-`render()` метод возвращает разметку типа `HTMLElement`
-
-`ProductDetailView` - класс для отображения детальной карточки товара, наследует методы интерфейсов `IModalView`, `IProductView`
 
 ## Presenter
 Связывание данных и отображений приложения происходит в корневом файле `index.ts`. В этом же файле происходит подписка сущностей на события.\
