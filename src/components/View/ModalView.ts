@@ -9,7 +9,7 @@ export class ModalView implements IModalView {
 
     constructor(
       protected template: HTMLTemplateElement,
-      protected events?: IEvents
+      protected events: IEvents
     ) {}
 
     open(): void {
