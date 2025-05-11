@@ -124,10 +124,14 @@ export type EventType =
 ## Слой данных
 Слой данных представлен моделями:
 
-### ApiRequestModel
+### ApiService
+Реализует паттерн синглтон, получить инстанс класса можно через `getInstance()`
+
 Назначение: Работа с API и кэширование запросов
 
 Методы:
+
+`getInstance` - Возвращает единственный экземпляр класса
 
 `get(uri)` - GET-запрос с кэшированием
 
@@ -135,7 +139,7 @@ export type EventType =
 
 Пример:
 ```
-const api = new ApiRequestModel()
+const api = new ApiService.getInstance()
 const data = await api.get('/product')
 ```
 
@@ -146,16 +150,17 @@ const data = await api.get('/product')
 
 `getCatalogItems()` - Получение списка товаров
 
-Зависимости: `ApiRequestModel`
+Зависимости: `ApiService`
 
 Конструктор принимает модель для работы с API  
 ```
-constructor(private api: ApiRequestModel) {}
+constructor(private api: IApiService) {}
 ```
 
 Пример:
 
 ```
+const api = ApiService.getInstance()
 const catalog = new CatalogModel(api)
 const items = await catalog.getCatalogItems()
 ```
@@ -197,15 +202,16 @@ basket.addItem(product)
 
 `validateOrder()` - Проверить правильность заказа
 
-Зависимости: `ApiRequestModel`
+Зависимости: `ApiService`
 
-Конструктор принимает данные заказа соответствующие типу `IOrderData` и экземпляр `ApiRequestModel`
+Конструктор принимает данные заказа соответствующие типу `IOrderData` и экземпляр `ApiService`
 ```
-constructor(protected _order: IOrderData, private api: ApiRequestModel) {}
+constructor(protected _order: IOrderData, private api: IApiService) {}
 ```
 
 Пример:
 ```
+const api = ApiService.getInstance()
 const order = new OrderModel(orderData, api)
 order.saveOrder()
 ```
