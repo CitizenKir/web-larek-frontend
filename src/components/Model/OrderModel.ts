@@ -1,5 +1,5 @@
 import { IOrderData, IOrderResult, TPaymentType } from '../../types';
-import { ApiRequestModel } from './ApiRequestModel';
+import { ApiService, IApiService } from '../ApiService';
 
 export interface IOrderModel {
     order: IOrderData
@@ -9,7 +9,7 @@ export interface IOrderModel {
 
 export class OrderModel implements IOrderModel {
 
-    constructor(protected _order: IOrderData, private api: ApiRequestModel) {}
+    constructor(protected _order: IOrderData, private api: IApiService) {}
 
     get order (): IOrderData {
         return this._order

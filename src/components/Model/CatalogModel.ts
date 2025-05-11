@@ -1,5 +1,5 @@
 import { IProductItem } from "../../types";
-import { ApiRequestModel } from './ApiRequestModel';
+import { ApiService, IApiService } from '../ApiService';
 
 export interface ICatalogModel {
     getCatalogItems(): Promise<IProductItem[]>
@@ -8,7 +8,7 @@ export interface ICatalogModel {
 export class CatalogModel implements ICatalogModel {
     private items: IProductItem[] = [];
 
-    constructor(private api: ApiRequestModel) {}
+    constructor(private api: IApiService) {}
 
     async getCatalogItems(): Promise<IProductItem[]> {
 
