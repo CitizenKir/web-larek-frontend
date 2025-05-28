@@ -19,9 +19,12 @@ export interface IContactData {
     phone: string;
 }
 
-export interface IOrderData extends IContactData {
+export interface IFormData extends IContactData {
     payment: TPaymentType
-    items: Pick<IProductItem, "id">[];
+}
+
+export interface IOrderData extends IFormData {
+    items: TOrderItem[];
     total: number;
 }
 
@@ -30,15 +33,24 @@ export interface IOrderResult {
     total: number;
 }
 
+export type TProductListResponse = {
+    total: number;
+    items: IProductItem[];
+}
+
 export type TBasketItem = Pick<IProductItem, "id" | "title" | "price">;
 
-export type TPaymentType = 'online' | 'onReceipt';
+export type TOrderItem = string;
+
+export type TPaymentType = 'card' | 'cash';
 
 export type TOrderStage = 'address' | 'contacts' | 'success';
 
 export type EventType =
     'product:detail' |
     'product:add-to-basket' |
+    'product:remove-from-basket' |
+    'product:remove-from-basket-in-card' |
     'basket:detail' |
     'basket:to-order' |
     'modal:open' |
@@ -48,3 +60,10 @@ export type EventType =
     'order:stage-success' |
     'order:error'
 
+export enum CategoryColors {
+    "хард-скил" = "hard",
+    "другое" = "other",
+    "дополнительное" = "additional",
+    "кнопка" = "button",
+    "софт-скил" = "soft",
+}

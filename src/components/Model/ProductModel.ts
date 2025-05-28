@@ -1,9 +1,8 @@
-import { IProductItem, TBasketItem } from '../../types';
-import { BasketModel } from './BasketModel';
+import { IProductItem, CategoryColors } from '../../types';
+
 
 export interface IProductModel extends IProductItem {
     badgeColor: string;
-    inBasket(): boolean;
 }
 
 export class ProductModel implements  IProductModel {
@@ -13,9 +12,9 @@ export class ProductModel implements  IProductModel {
     readonly category: string;
     readonly image: string;
     readonly price: number;
+    readonly badgeColor: string
     constructor(
       productData: IProductItem,
-      private basket: BasketModel
     ) {
         this.id = productData.id;
         this.title = productData.title;
@@ -23,13 +22,6 @@ export class ProductModel implements  IProductModel {
         this.category = productData.category;
         this.image = productData.image;
         this.price = productData.price;
-    }
-
-    get badgeColor(): string {
-        return
-    }
-
-    inBasket(): boolean {
-
+        this.badgeColor = CategoryColors[productData.category as keyof typeof CategoryColors]
     }
 }
