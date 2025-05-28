@@ -7,22 +7,26 @@ export interface IBasketModel extends IBasketData {
 }
 
 export class BasketModel implements IBasketModel {
-    items: TBasketItem[] = [];
+    items: TBasketItem[];
+
+    constructor() {
+        this.items = []
+    }
 
     get total (): number {
         return this.items.reduce((sum, item) => sum + item.price, 0);
     }
 
     get count (): number {
-        return this.items.length
+        return this.items.length 
     }
 
     addItem(item: TBasketItem): void {
-
+        this.items.push(item)
     }
 
     removeItem(id: string): void {
-
+        this.items = this.items.filter(item => item.id !== id)
     }
 
     clearBasket(): void {

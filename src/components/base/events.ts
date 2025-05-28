@@ -1,4 +1,7 @@
 // Хорошая практика даже простые типы выносить в алиасы
+
+import { EventType } from "../../types";
+
 // Зато когда захотите поменять это достаточно сделать в одном месте
 type EventName = string | RegExp;
 type Subscriber = Function;
@@ -9,7 +12,7 @@ type EmitterEvent = {
 
 export interface IEvents {
     on<T extends object>(event: EventName, callback: (data: T) => void): void;
-    emit<T extends object>(event: string, data?: T): void;
+    emit<T extends object>(event: EventType, data?: T): void;
     trigger<T extends object>(event: string, context?: Partial<T>): (data: T) => void;
 }
 
