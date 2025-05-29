@@ -1,1 +1,99 @@
+/*! ../../types */
+
+/*! ../../utils/constants */
+
+/*! ../../utils/utils */
+
+/*! ../utils/constants */
+
+/*! ./ProductView */
+
+/*! ./base/api */
+
+/*! ./components/ApiService */
+
+/*! ./components/Model/BasketModel */
+
+/*! ./components/Model/ProductModel */
+
+/*! ./components/View/BasketView */
+
+/*! ./components/View/ModalView */
+
+/*! ./components/View/OrderFormView */
+
+/*! ./components/View/PageView */
+
+/*! ./components/View/ProductDetailView */
+
+/*! ./components/View/ProductView */
+
+/*! ./components/base/events */
+
+/*! ./scss/styles.scss */
+
 /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
+
+/*!**********************!*\
+  !*** ./src/index.ts ***!
+  \**********************/
+
+/*!****************************!*\
+  !*** ./src/types/index.ts ***!
+  \****************************/
+
+/*!****************************!*\
+  !*** ./src/utils/utils.ts ***!
+  \****************************/
+
+/*!******************************!*\
+  !*** ./src/scss/styles.scss ***!
+  \******************************/
+
+/*!********************************!*\
+  !*** ./src/utils/constants.ts ***!
+  \********************************/
+
+/*!************************************!*\
+  !*** ./src/components/base/api.ts ***!
+  \************************************/
+
+/*!**************************************!*\
+  !*** ./src/components/ApiService.ts ***!
+  \**************************************/
+
+/*!***************************************!*\
+  !*** ./src/components/base/events.ts ***!
+  \***************************************/
+
+/*!*****************************************!*\
+  !*** ./src/components/View/PageView.ts ***!
+  \*****************************************/
+
+/*!******************************************!*\
+  !*** ./src/components/View/ModalView.ts ***!
+  \******************************************/
+
+/*!*******************************************!*\
+  !*** ./src/components/View/BasketView.ts ***!
+  \*******************************************/
+
+/*!********************************************!*\
+  !*** ./src/components/View/ProductView.ts ***!
+  \********************************************/
+
+/*!*********************************************!*\
+  !*** ./src/components/Model/BasketModel.ts ***!
+  \*********************************************/
+
+/*!**********************************************!*\
+  !*** ./src/components/Model/ProductModel.ts ***!
+  \**********************************************/
+
+/*!**********************************************!*\
+  !*** ./src/components/View/OrderFormView.ts ***!
+  \**********************************************/
+
+/*!**************************************************!*\
+  !*** ./src/components/View/ProductDetailView.ts ***!
+  \**************************************************/
