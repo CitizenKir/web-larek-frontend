@@ -218,6 +218,29 @@ const product = new ProductModel(item)
 ```
 
 ## Слой представлений (Views)
+
+### PageView
+Назначение: хранит необходимые элементы приложения и предоставляет доступ к изменению элементов
+
+Конструктор принимает разметку приложения
+
+Свойства:
+
+`basketCount` - позволяет получить и задать количество элементов в корзине
+
+Методы:
+
+`renderCatalogItem(item: HTMLElement)` - Отобразить элемент в каталоге товаров
+
+`renderModal(modal: HTMLElement)` - Добавляет модальное окно на страницу
+
+Пример:
+```
+const element = document.querySelector('.element')
+const modal = new ModalView(template)
+modal.open(element)
+```
+
 ### ModalView
 Назначение: Базовое модальное окно
 
