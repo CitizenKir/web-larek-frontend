@@ -31,14 +31,26 @@ export class ModalView implements IModalView {
 		return this.element;
 	}
 
+	protected _toggleModal(state: boolean = true) {
+		this.element.classList.toggle('modal_active', state);
+	}
+
+	protected _handleEscape = (evt: KeyboardEvent) => {
+		if (evt.key === 'Escape') {
+			this.close();
+		}
+	};
+
 	open(content: HTMLElement): void {
+		this._toggleModal();
 		this.events.emit('modal:open');
-		this.element.classList.add('modal_active');
 		this.contentElement.replaceChildren(content);
+		document.addEventListener('keydown', this._handleEscape);
 	}
 
 	close(): void {
+		this._toggleModal(false);
+		document.removeEventListener('keydown', this._handleEscape);
 		this.contentElement.innerHTML = '';
-		this.element.classList.remove('modal_active');
 	}
 }

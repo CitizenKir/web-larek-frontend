@@ -8,38 +8,27 @@ import { API_URL } from '../utils/constants';
 import { Api } from './base/api';
 
 export interface IApiService {
-	get<T>(uri: string): Promise<T>;
-	post(uri: string, body: object): Promise<object>;
 	getCatalogItems(): Promise<IProductItem[]>;
+	saveOrder(order: IOrderData): Promise<IOrderResult>;
 }
 
-export class ApiService implements IApiService {
+export class ApiService extends Api implements IApiService {
 	private static instance: ApiService;
-	apiProvider = new Api(API_URL);
-
-	private constructor() {}
 
 	public static getInstance(): ApiService {
 		if (!ApiService.instance) {
-			ApiService.instance = new ApiService();
+			ApiService.instance = new ApiService(API_URL);
 		}
 		return ApiService.instance;
 	}
 
-	async get<T>(uri: string): Promise<T> {
-		return this.apiProvider.get(uri) as T;
-	}
-
-	async post<T>(uri: string, body: object): Promise<T> {
-		return this.apiProvider.post(uri, body) as T;
-	}
-
 	async getCatalogItems(): Promise<IProductItem[]> {
 		const response = await this.get<TProductListResponse>('/product/');
-		return response.items as IProductItem[];
+
+		return response.items;
 	}
 
-	saveOrder(order: IOrderData): Promise<IOrderResult> {
+	async saveOrder(order: IOrderData): Promise<IOrderResult> {
 		return this.post<IOrderResult>('/order/', order);
 	}
 }

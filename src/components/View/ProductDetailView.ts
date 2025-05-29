@@ -4,10 +4,7 @@ import { IEvents } from '../base/events';
 import { CategoryColors } from '../../types';
 import { ProductModel } from '../Model/ProductModel';
 
-export class ProductDetailView
-	extends ProductView
-	implements IProductView
-{
+export class ProductDetailView extends ProductView implements IProductView {
 	protected descriptionElement: HTMLElement;
 	protected buttonBuyElement: HTMLButtonElement;
 	private currentClickHandler: EventListener | null;
@@ -20,25 +17,30 @@ export class ProductDetailView
 	}
 
 	render(item: ProductModel, inBasket = false): HTMLElement {
-		if (this.currentClickHandler) {
-			this.buttonBuyElement.removeEventListener(
-				'click',
-				this.currentClickHandler
-			);
-		}
-		this.currentClickHandler = () => {
-			if (inBasket) {
-				this.events.emit('product:remove-from-basket-in-card', item);
-			} else {
-				this.events.emit('product:add-to-basket', item);
-			}
-		};
-
-		this.buttonBuyElement.addEventListener('click', this.currentClickHandler);
-
 		this.buttonBuyElement.textContent = inBasket
 			? 'Убрать из корзины'
 			: 'В корзину';
+
+		//При отсутсвующей цене кнопка недоступна
+		if (item.price === null) {
+			this.buttonBuyElement.disabled = true;
+		} else {
+			if (this.currentClickHandler) {
+				this.buttonBuyElement.removeEventListener(
+					'click',
+					this.currentClickHandler
+				);
+			}
+			this.currentClickHandler = () => {
+				if (inBasket) {
+					this.events.emit('product:remove-from-basket-in-card', item);
+				} else {
+					this.events.emit('product:add-to-basket', item);
+				}
+			};
+
+			this.buttonBuyElement.addEventListener('click', this.currentClickHandler);
+		}
 
 		this.categoryElement.textContent = item.category;
 		this.categoryElement.classList.value = 'card__category';
