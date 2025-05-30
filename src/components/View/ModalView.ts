@@ -37,7 +37,7 @@ export class ModalView implements IModalView {
 
 	protected _handleEscape = (evt: KeyboardEvent) => {
 		if (evt.key === 'Escape') {
-			this.close();
+			this.events.emit('modal:close')
 		}
 	};
 

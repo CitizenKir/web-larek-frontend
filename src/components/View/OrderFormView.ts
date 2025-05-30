@@ -67,6 +67,7 @@ export class OrderFormView implements IOrderFormView {
 
 	protected validateForm(stage: TOrderStage): void {
 		this.formErrors.clear();
+        const emailRegEx: RegExp = /^\S+@\S+\.\S+$/
         const phoneRegEx: RegExp = /^\+7\d{10}$/
 		if (stage === 'address') {
 			if (
@@ -82,7 +83,7 @@ export class OrderFormView implements IOrderFormView {
 				this.formErrors.set('paymentType', message);
 			}
 		} else if (stage === 'contacts') {
-            if (!this.formData.get('email')) {
+            if (!this.formData.get('email') || !emailRegEx.test(this.formData.get('email'))) {
                 const message = 'Необходимо указать email'
                 this.formErrors.set('email', message)
             }
