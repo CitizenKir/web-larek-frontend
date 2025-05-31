@@ -83,7 +83,7 @@ export class OrderFormView implements IOrderFormView {
 				this.formErrors.set('paymentType', message);
 			}
 		} else if (stage === 'contacts') {
-            if (!this.formData.get('email') || !emailRegEx.test(this.formData.get('email'))) {
+            if (!this.formData.get('email') || !emailRegEx.test(`${this.formData.get('email')}`)) {
                 const message = 'Необходимо указать email'
                 this.formErrors.set('email', message)
             }
