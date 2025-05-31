@@ -25,6 +25,7 @@ export class ProductDetailView extends ProductView implements IProductView {
 		if (item.price === null) {
 			this.buttonBuyElement.disabled = true;
 		} else {
+			this.buttonBuyElement.disabled = false;
 			if (this.currentClickHandler) {
 				this.buttonBuyElement.removeEventListener(
 					'click',
